@@ -98,12 +98,11 @@ See more info at [webui/SELF_GEN_VIEWER.md](webui/SELF_GEN_VIEWER.md).
 
 ### 📚 Citation
 ```bibtex
-@techreport{sakana2025doc-to-lora,
-  title       = {{Doc-to-LoRA: Learning to Instantly Internalize Contexts}},
-  author      = {Rujikorn Charakorn and Edoardo Cetin and Shinnosuke Uesaka and Robert Tjarko Lange},
-  institution = {Sakana AI},
-  year        = {2026},
-  month       = {Febuary},
-  note        = {Technical Report}
+@inproceedings{charakorn2026doctolora,
+  title       ={Doc-to-Lo{RA}: Learning to Instantly Internalize Contexts},
+  author      ={Rujikorn Charakorn and Edoardo Cetin and Shinnosuke Uesaka and Robert Tjarko Lange},
+  booktitle   ={Forty-third International Conference on Machine Learning},
+  year        ={2026},
+  url         ={https://openreview.net/forum?id=iW1oBBO72S}
 }
 ```

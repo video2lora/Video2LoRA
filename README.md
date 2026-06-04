@@ -176,3 +176,17 @@ If you have raw FineVideo metadata/videos laid out under
 ```bash
 uv run python -m scripts.video2lora.build_finevideo_stage1_manifest
 ```
+
+## Cite
+
+```
+@misc{suri2026video2loraparametricvideointernalization,
+      title={Video2LoRA: Parametric Video Internalization for Vision-Language Models}, 
+      author={Manan Suri and Sarvesh Baskar and Dinesh Manocha},
+      year={2026},
+      eprint={2606.04351},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2606.04351}, 
+}
+```

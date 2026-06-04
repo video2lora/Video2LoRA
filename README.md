@@ -18,7 +18,7 @@ Official implementation of **Video2LoRA**
 ### [Install](#install) &nbsp;&bull;&nbsp; [Checkpoints](#checkpoints) &nbsp;&bull;&nbsp; [Inference](#inference) &nbsp;&bull;&nbsp; [Data Format](#data-format) &nbsp;&bull;&nbsp; [Training](#train)
 
 <p align="center">
-  <img src="assets/video2lora-animated-diagram.svg?v=2" alt="Animated Video2LoRA method diagram" width="900">
+  <img src="assets/video2lora-diagram-white.svg" alt="Animated Video2LoRA method diagram" width="900">
 </p>
 
 </div>

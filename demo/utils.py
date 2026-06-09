@@ -254,13 +254,13 @@ def display_comparison(
             
             <!-- Base Model Card -->
             <div style="background-color: #fff; border: 1.5px solid #ea580c; border-radius: 8px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-                <h5 style="margin: 0 0 6px 0; color: #ea580c; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em; font-weight: 700;">BASE MODEL (with visual tokens)</h5>
+                <h5 style="margin: 0 0 6px 0; color: #ea580c; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em; font-weight: 700;">BASE MODEL</h5>
                 <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #334155;">{base_model_output}</p>
             </div>
             
             <!-- Video2LoRA Card -->
             <div style="background-color: #f0fdf4; border: 1.5px solid #16a34a; border-radius: 8px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-                <h5 style="margin: 0 0 6px 0; color: #16a34a; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em; font-weight: 700;">VIDEO2LORA (zero visual tokens)</h5>
+                <h5 style="margin: 0 0 6px 0; color: #16a34a; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em; font-weight: 700;">VIDEO2LORA</h5>
                 <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #1e293b; font-weight: 500;">{video2lora_output}</p>
             </div>
             

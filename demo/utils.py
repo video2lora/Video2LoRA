@@ -233,6 +233,9 @@ def display_comparison(
         <div style="text-align: center; margin-bottom: 20px; background: #000; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
             <video src="{video_src}" controls loop muted autoplay style="width: 100%; max-height: 400px; object-fit: contain; display: block; margin: 0 auto;"></video>
         </div>
+        <div style="text-align: center; margin-top: -12px; margin-bottom: 16px;">
+            <a href="{video_src}" target="_blank" style="color: #2563eb; font-size: 13px; font-weight: 500; text-decoration: none;">🔗 Click here to open video file directly (GitHub preview fallback)</a>
+        </div>
         
         <!-- Question Prompt Card -->
         <div style="background-color: #f0f4ff; border: 1px solid #dbeafe; border-radius: 8px; padding: 16px; margin-bottom: 16px;">

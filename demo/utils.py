@@ -281,3 +281,114 @@ def display_comparison(
     </div>
     """
     display(HTML(html_content))
+
+
+def run_inference_and_compare(example, model, raw_model, processor, tokenizer, config, device):
+    """
+    Runs both base model inference (with visual tokens) and Video2LoRA inference
+    (zero visual tokens) for a single example, and displays their side-by-side comparison.
+    """
+    import gc
+
+    # 1. Base Model Inference (with visual tokens)
+    model.reset()
+    torch.cuda.empty_cache()
+    gc.collect()
+
+    base_messages = [
+        [
+            {
+                "role": "user",
+                "content": [
+                    {"type": "video", "path": example["video_path"]},
+                    {"type": "text", "text": example["prompt"]}
+                ]
+            }
+        ]
+    ]
+
+    base_inputs = prepare_smolvlm_inputs(
+        processor,
+        base_messages,
+        device,
+        video_fps=config.video_fps,
+        max_frames=config.max_frames,
+        video_size_longest_edge=config.video_size_longest_edge,
+        video_load_backend=config.video_load_backend
+    )
+
+    with torch.inference_mode():
+        base_generated_ids = raw_model.generate(
+            **base_inputs,
+            max_new_tokens=config.generation_max_new_tokens,
+            do_sample=False,
+            pad_token_id=tokenizer.pad_token_id,
+            eos_token_id=tokenizer.eos_token_id
+        )
+
+        base_pred = tokenizer.decode(
+            base_generated_ids[0][base_inputs["input_ids"].shape[1]:],
+            skip_special_tokens=True
+        ).strip()
+
+        # 2. Video2LoRA Inference (zero visual tokens)
+        generated_loras = run_internalization(example, model, raw_model, processor, config, device)
+
+        # Inject dynamic weights
+        model.patch_lora_forward()
+        apply_lora_to_layers(
+            model.base_model,
+            model.hypernet.layer_indices,
+            generated_loras,
+            torch.ones(1, dtype=torch.int32, device=device),
+            position_ids=None
+        )
+
+        prompt_ids = tokenizer.apply_chat_template(
+            [
+                {
+                    "role": "user",
+                    "content": [{"type": "text", "text": example["prompt"]}]
+                }
+            ],
+            tokenize=True,
+            add_generation_prompt=True,
+            return_tensors="pt"
+        ).to(device)
+
+        if hasattr(prompt_ids, "keys"):
+            input_ids = prompt_ids["input_ids"]
+            attention_mask = prompt_ids.get("attention_mask", torch.ones_like(input_ids))
+        else:
+            input_ids = prompt_ids
+            attention_mask = torch.ones_like(input_ids)
+
+        generated_ids = model.base_model.generate(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            max_new_tokens=config.generation_max_new_tokens,
+            do_sample=False,
+            pad_token_id=tokenizer.pad_token_id,
+            eos_token_id=tokenizer.eos_token_id
+        )
+
+        video2lora_pred = tokenizer.decode(
+            generated_ids[0][input_ids.shape[1]:],
+            skip_special_tokens=True
+        ).strip()
+
+    # Reset model and clean up
+    model.reset()
+    torch.cuda.empty_cache()
+    gc.collect()
+
+    # Display side-by-side comparison
+    display_comparison(
+        video_path=example["video_path"],
+        question_prompt=example["prompt"],
+        ground_truth=example["target_text"],
+        base_model_output=base_pred,
+        video2lora_output=video2lora_pred,
+        dataset_name=example["dataset"]
+    )
+

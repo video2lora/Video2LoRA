@@ -15,7 +15,7 @@ Official implementation of **Video2LoRA**
 
 ---
 
-### [Install](#install) &nbsp;&bull;&nbsp; [Checkpoints](#checkpoints) &nbsp;&bull;&nbsp; [Inference](#inference) &nbsp;&bull;&nbsp; [Data Format](#data-format) &nbsp;&bull;&nbsp; [Training](#train)
+### [Quick Start](#-quick-start) &nbsp;&bull;&nbsp; [Install](#install) &nbsp;&bull;&nbsp; [Checkpoints](#checkpoints) &nbsp;&bull;&nbsp; [Inference](#inference) &nbsp;&bull;&nbsp; [Data Format](#data-format) &nbsp;&bull;&nbsp; [Training](#train)
 
 <p align="center">
   <img src="assets/video2lora-diagram-white.svg" alt="Animated Video2LoRA method diagram" width="900">
@@ -24,6 +24,19 @@ Official implementation of **Video2LoRA**
 </div>
 
 Video2LoRA trains a hypernetwork that converts a video into LoRA weights for a frozen vision-language model. The generated adapter lets the model answer later text prompts without feeding the video tokens again.
+
+## 🚀 Quick Start
+
+Try zero-visual-token inference instantly in your browser via our self-contained interactive tutorial notebook:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/video2lora/Video2LoRA/blob/demo/demo.ipynb)
+
+This interactive notebook guides you through:
+1. Downloading the 2.2B SmolVLM2 hypernetwork checkpoint.
+2. Linking and resolving the project's qualitative videos.
+3. Parametric internalization (extracting visual features and generating custom adapter weights).
+4. Running comparative Q&A inference (comparing the base vision-language model against the Video2LoRA adapter with zero visual tokens).
+5. Visualizing the comparison using a custom dashboard layout.
 
 ## Install
 

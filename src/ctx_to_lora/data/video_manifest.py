@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Any
 
 
-DATA_ROOT = Path(os.environ.get("VIDEO2LORA_DATA_ROOT", "data/video2lora"))
+DATA_ROOT = Path(os.environ.get("FRAMES2LORA_DATA_ROOT", "data/frames2lora"))
 
 CAPTION_PROMPTS = (
     "Describe what is happening in this video.",

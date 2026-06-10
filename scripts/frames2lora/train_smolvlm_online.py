@@ -52,7 +52,7 @@ from ctx_to_lora.modeling.hypernet import (
 )
 
 
-DATA_ROOT = Path(os.environ.get("VIDEO2LORA_DATA_ROOT", "data/video2lora"))
+DATA_ROOT = Path(os.environ.get("FRAMES2LORA_DATA_ROOT", "data/frames2lora"))
 
 
 @dataclass
@@ -104,7 +104,7 @@ class TrainArgs:
 
 def parse_args() -> TrainArgs:
     parser = argparse.ArgumentParser(
-        description="Train Video2LoRA with online SmolVLM video feature extraction."
+        description="Train Frames2LoRA with online SmolVLM video feature extraction."
     )
     parser.add_argument(
         "--smolvlm-name-or-path",
@@ -177,7 +177,7 @@ def parse_args() -> TrainArgs:
     )
     parser.add_argument("--kl-weight", type=float, default=0.0)
     parser.add_argument("--kl-temperature", type=float, default=1.0)
-    parser.add_argument("--wandb-project", default="video2lora-video-centric")
+    parser.add_argument("--wandb-project", default="frames2lora-video-centric")
     parser.add_argument(
         "--wandb-mode",
         default="auto",
@@ -509,7 +509,7 @@ def build_base_model(args: TrainArgs, device: torch.device):
     return base_model, tokenizer
 
 
-def build_video2lora_model(args: TrainArgs, device: torch.device):
+def build_frames2lora_model(args: TrainArgs, device: torch.device):
     base_model, base_tokenizer = build_base_model(args, device)
 
     processor = AutoProcessor.from_pretrained(
@@ -1098,7 +1098,7 @@ def main():
         load_jsonl(args.val_manifest, args.max_val_samples) if args.val_manifest else []
     )
 
-    model, base_tokenizer, processor, vlm = build_video2lora_model(args, device)
+    model, base_tokenizer, processor, vlm = build_frames2lora_model(args, device)
     collator = SmolVLMOnlineCollator(
         base_tokenizer=base_tokenizer,
         video_fps=args.video_fps,

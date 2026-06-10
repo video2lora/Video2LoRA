@@ -10,7 +10,7 @@ from accelerate import Accelerator
 from accelerate.utils import set_seed
 
 from ctx_to_lora.data.video_manifest import dump_jsonl, load_video_manifest
-from scripts.video2lora.train_smolvlm_stage1 import (
+from scripts.frames2lora.train_smolvlm_stage1 import (
     TrainArgs,
     build_stage1_model,
     generate_fixed_examples,
@@ -19,7 +19,7 @@ from scripts.video2lora.train_smolvlm_stage1 import (
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="Run Video2LoRA inference from a Stage 1 checkpoint."
+        description="Run Frames2LoRA inference from a Stage 1 checkpoint."
     )
     parser.add_argument(
         "--run-dir",
@@ -124,7 +124,7 @@ def default_train_args(preset: str) -> TrainArgs:
         generation_max_new_tokens=128,
         legacy_sanity_manifests=[],
         legacy_sanity_max_samples_per_manifest=0,
-        wandb_project="video2lora",
+        wandb_project="frames2lora",
         wandb_mode="disabled",
         wandb_group=None,
         wandb_run_name=None,

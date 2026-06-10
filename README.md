@@ -1,16 +1,16 @@
 <div align="center">
 
-# Video2LoRA: Parametric Video Internalization for Vision-Language Models
+# Frames2LoRA: Parametric Video Internalization for Vision-Language Models
 
-Official implementation of **Video2LoRA**
+Official implementation of **Frames2LoRA**
 
 [**Manan Suri**](https://manansuri.com/) &nbsp;&middot;&nbsp; [**Sarvesh Baskar**](https://sarvesh-369.github.io/) &nbsp;&middot;&nbsp; [**Dinesh Manocha**](https://www.cs.umd.edu/people/dmanocha)
 
 *University of Maryland, College Park*
 
-[![project page](https://img.shields.io/badge/🌐_project-page-3b82f6?style=flat-square)](https://video2lora.github.io/)
+[![project page](https://img.shields.io/badge/🌐_project-page-3b82f6?style=flat-square)](https://frames2lora.github.io/)
 [![arxiv paper](https://img.shields.io/badge/📄_arxiv_paper-2606.04351-b31b1b?style=flat-square)](https://arxiv.org/abs/2606.04351)
-[![hf checkpoints](https://img.shields.io/badge/🤗_checkpoints-Video2LoRA-orange?style=flat-square)](https://huggingface.co/MananSuri27/Video2LoRA-SmolVLM-ckpts)
+[![hf checkpoints](https://img.shields.io/badge/🤗_checkpoints-Frames2LoRA-orange?style=flat-square)](https://huggingface.co/MananSuri27/Frames2LoRA-SmolVLM-ckpts/tree/main)
 [![license](https://img.shields.io/badge/⚖️_license-MIT-gray?style=flat-square)](LICENSE)
 
 ---
@@ -18,46 +18,46 @@ Official implementation of **Video2LoRA**
 ### [Install](#install) &nbsp;&bull;&nbsp; [Checkpoints](#checkpoints) &nbsp;&bull;&nbsp; [Inference](#inference) &nbsp;&bull;&nbsp; [Data Format](#data-format) &nbsp;&bull;&nbsp; [Training](#train)
 
 <p align="center">
-  <img src="assets/video2lora-diagram-white.svg" alt="Animated Video2LoRA method diagram" width="900">
+  <img src="assets/Frames2LoRA-actual-animated-white.svg" alt="Animated Frames2LoRA method diagram" width="900">
 </p>
 
 </div>
 
-Video2LoRA trains a hypernetwork that converts a video into LoRA weights for a frozen vision-language model. The generated adapter lets the model answer later text prompts without feeding the video tokens again.
+Frames2LoRA trains a hypernetwork that converts a video into LoRA weights for a frozen vision-language model. The generated adapter lets the model answer later text prompts without feeding the video tokens again.
 
 ## Install
 
 Install `uv`.
 
 ```bash
-git clone https://github.com/MananSuri27/video2lora.git
-cd video2lora
+git clone https://github.com/frames2lora/Frames2LoRA.git
+cd Frames2LoRA
 uv sync
 ```
 
 For local video path resolution, set:
 
 ```bash
-export VIDEO2LORA_DATA_ROOT=$PWD/data/video2lora
+export FRAMES2LORA_DATA_ROOT=$PWD/data/frames2lora
 ```
 
-If unset, `VIDEO2LORA_DATA_ROOT` defaults to `data/video2lora`.
+If unset, `FRAMES2LORA_DATA_ROOT` defaults to `data/frames2lora`.
 
 ## Checkpoints
 
 Download the released checkpoints from Hugging Face:
 
 ```bash
-uv run huggingface-cli download MananSuri27/Video2LoRA-SmolVLM-ckpts \
-  --local-dir checkpoints/Video2LoRA-SmolVLM-ckpts
+uv run huggingface-cli download MananSuri27/Frames2LoRA-SmolVLM-ckpts \
+  --local-dir checkpoints/Frames2LoRA-SmolVLM-ckpts
 ```
 
 The repo contains:
 
 ```text
-checkpoints/Video2LoRA-SmolVLM-ckpts/
-  video2lora-smolvlm2-500m-best-ce.pt
-  video2lora-smolvlm2-2.2b-best-ce.pt
+checkpoints/Frames2LoRA-SmolVLM-ckpts/
+  frames2lora-smolvlm2-500m-best-ce.pt
+  frames2lora-smolvlm2-2.2b-best-ce.pt
 ```
 
 
@@ -70,8 +70,8 @@ Create a JSONL manifest with one row per video. For example:
 ```
 
 ```bash
-uv run python -m scripts.video2lora.infer \
-  --checkpoint checkpoints/Video2LoRA-SmolVLM-ckpts/video2lora-smolvlm2-500m-best-ce.pt \
+uv run python -m scripts.frames2lora.infer \
+  --checkpoint checkpoints/Frames2LoRA-SmolVLM-ckpts/frames2lora-smolvlm2-500m-best-ce.pt \
   --manifest /path/to/manifest.jsonl \
   --output outputs/tiny_generations.jsonl
 ```
@@ -79,7 +79,7 @@ uv run python -m scripts.video2lora.infer \
 For the 2.2B checkpoint, change `--checkpoint` to:
 
 ```bash
-checkpoints/Video2LoRA-SmolVLM-ckpts/video2lora-smolvlm2-2.2b-best-ce.pt
+checkpoints/Frames2LoRA-SmolVLM-ckpts/frames2lora-smolvlm2-2.2b-best-ce.pt
 ```
 
 The output JSONL includes the original row fields plus `prediction` and
@@ -102,7 +102,7 @@ Training and inference use JSONL manifests. Each line is one example:
 }
 ```
 
-Relative `video_path` values are resolved against `VIDEO2LORA_DATA_ROOT`.
+Relative `video_path` values are resolved against `FRAMES2LORA_DATA_ROOT`.
 Absolute paths are used as-is.
 
 ## Generate Teacher Data
@@ -111,11 +111,11 @@ The final CE training recipe uses cached teacher-generated targets. Starting
 from readable manifests, generate teacher targets with:
 
 ```bash
-export VIDEO2LORA_DATA_ROOT=$PWD/data/video2lora
+export FRAMES2LORA_DATA_ROOT=$PWD/data/frames2lora
 
-CUDA_VISIBLE_DEVICES=0 uv run python -m scripts.video2lora.generate_finevideo_teacher_targets \
-  --input-manifest $VIDEO2LORA_DATA_ROOT/processed/finevideo/train.jsonl \
-  --output-manifest $VIDEO2LORA_DATA_ROOT/processed/finevideo/train.teacher_visual_smolvlm.jsonl \
+CUDA_VISIBLE_DEVICES=0 uv run python -m scripts.frames2lora.generate_finevideo_teacher_targets \
+  --input-manifest $FRAMES2LORA_DATA_ROOT/processed/finevideo/train.jsonl \
+  --output-manifest $FRAMES2LORA_DATA_ROOT/processed/finevideo/train.teacher_visual_smolvlm.jsonl \
   --smolvlm-name-or-path HuggingFaceTB/SmolVLM2-2.2B-Instruct \
   --per-device-batch-size 8 \
   --max-frames 12 \
@@ -133,12 +133,12 @@ The main CE training entrypoint is:
 uv run accelerate launch \
   --config_file accelerate_config.yaml \
   --num_processes 4 \
-  -m scripts.video2lora.train_smolvlm_stage1 \
+  -m scripts.frames2lora.train_smolvlm_stage1 \
   --smolvlm-name-or-path HuggingFaceTB/SmolVLM2-500M-Video-Instruct \
-  --train-manifest data/video2lora/processed/finevideo/train.teacher_visual_smolvlm.jsonl \
-  --val-manifest data/video2lora/processed/finevideo/val.teacher_visual_smolvlm.jsonl \
-  --val-core-manifest data/video2lora/processed/finevideo/val.teacher_visual_smolvlm.jsonl \
-  --output-dir runs/video2lora-smoke \
+  --train-manifest data/frames2lora/processed/finevideo/train.teacher_visual_smolvlm.jsonl \
+  --val-manifest data/frames2lora/processed/finevideo/val.teacher_visual_smolvlm.jsonl \
+  --val-core-manifest data/frames2lora/processed/finevideo/val.teacher_visual_smolvlm.jsonl \
+  --output-dir runs/frames2lora-smoke \
   --per-device-batch-size 2 \
   --gradient-accumulation-steps 8 \
   --max-steps 1000 \
@@ -159,29 +159,29 @@ The self-distillation variant is also included:
 uv run accelerate launch \
   --config_file accelerate_config.yaml \
   --num_processes 4 \
-  -m scripts.video2lora.train_smolvlm_stage1_selfdistill \
+  -m scripts.frames2lora.train_smolvlm_stage1_selfdistill \
   --smolvlm-name-or-path HuggingFaceTB/SmolVLM2-500M-Video-Instruct \
-  --train-manifest data/video2lora/processed/finevideo/train.jsonl \
-  --val-manifest data/video2lora/processed/finevideo/val.jsonl \
-  --val-gen-manifest data/video2lora/processed/finevideo/val_gen_100.jsonl \
-  --output-dir runs/video2lora-selfdistill \
+  --train-manifest data/frames2lora/processed/finevideo/train.jsonl \
+  --val-manifest data/frames2lora/processed/finevideo/val.jsonl \
+  --val-gen-manifest data/frames2lora/processed/finevideo/val_gen_100.jsonl \
+  --output-dir runs/frames2lora-selfdistill \
   --wandb-mode disabled
 ```
 
 ## Build FineVideo Manifests
 
 If you have raw FineVideo metadata/videos laid out under
-`$VIDEO2LORA_DATA_ROOT/raw/finevideo`, build Stage 1 manifests with:
+`$FRAMES2LORA_DATA_ROOT/raw/finevideo`, build Stage 1 manifests with:
 
 ```bash
-uv run python -m scripts.video2lora.build_finevideo_stage1_manifest
+uv run python -m scripts.frames2lora.build_finevideo_stage1_manifest
 ```
 
 ## Cite
 
 ```
-@misc{suri2026video2loraparametricvideointernalization,
-      title={Video2LoRA: Parametric Video Internalization for Vision-Language Models}, 
+@misc{suri2026frames2loraparametricvideointernalization,
+      title={Frames2LoRA: Parametric Video Internalization for Vision-Language Models}, 
       author={Manan Suri and Sarvesh Baskar and Dinesh Manocha},
       year={2026},
       eprint={2606.04351},

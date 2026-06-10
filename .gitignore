@@ -10,7 +10,7 @@ trained_d2l/
 checkpoints/
 runs/
 outputs/
-data/video2lora/
+data/frames2lora/
 hf_key*
 wandb_key*
 pat_token*

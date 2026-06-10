@@ -40,11 +40,11 @@ from ctx_to_lora.data.video_manifest import (
     normalize_manifest_row,
     resolve_video_path,
 )
-from scripts.video2lora.train_smolvlm_online import (
+from scripts.frames2lora.train_smolvlm_online import (
     prepare_smolvlm_inputs,
     prepare_smolvlm_teacher_batch,
 )
-from scripts.video2lora.train_smolvlm_stage1 import (
+from scripts.frames2lora.train_smolvlm_stage1 import (
     build_stage1_model,
     compute_ce_loss,
     compute_teacher_kl_loss,
@@ -196,7 +196,7 @@ class TrainArgs:
 
 def parse_args() -> TrainArgs:
     parser = argparse.ArgumentParser(
-        description="Stage 1 self-distillation for Video2LoRA using teacher-generated tasks."
+        description="Stage 1 self-distillation for Frames2LoRA using teacher-generated tasks."
     )
     parser.add_argument(
         "--smolvlm-name-or-path",
@@ -253,7 +253,7 @@ def parse_args() -> TrainArgs:
         default="cycle",
         choices=("cycle", "caption_only", "summary_only", "qa_only"),
     )
-    parser.add_argument("--wandb-project", default="video2lora-finevideo-selfdistill")
+    parser.add_argument("--wandb-project", default="frames2lora-finevideo-selfdistill")
     parser.add_argument(
         "--wandb-mode",
         default="auto",

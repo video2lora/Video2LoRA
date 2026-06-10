@@ -1,1 +1,1 @@
-# Video2LoRA Demo Package
+# Frames2LoRA Demo Package

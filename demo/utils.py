@@ -22,14 +22,14 @@ from IPython.display import HTML, display
 # Local repository imports
 from ctx_to_lora.modeling.lora_layer import apply_lora_to_layers
 from ctx_to_lora.modeling.lora_merger import combine_lora
-from scripts.video2lora.train_smolvlm_online import (
+from scripts.frames2lora.train_smolvlm_online import (
     prepare_smolvlm_inputs,
     extract_l2l_fused_text_features,
 )
 
 
 @dataclass
-class Video2LoRAConfig:
+class Frames2LoRAConfig:
     smolvlm_name_or_path: str
     train_manifest: str
     val_manifest: str
@@ -107,7 +107,7 @@ def download_qualitative_videos(examples):
             
         # 3. Check and retrieve the video file
         if not os.path.exists(video_path):
-            url = f"https://video2lora.github.io/{video_path}"
+            url = f"https://frames2lora.github.io/{video_path}"
             print(f"Downloading {video_path} from {url}...")
             try:
                 urllib.request.urlretrieve(url, video_path)
@@ -206,7 +206,7 @@ def display_comparison(
     question_prompt,
     ground_truth,
     base_model_output,
-    video2lora_output,
+    frames2lora_output,
     dataset_name
 ):
     """
@@ -217,7 +217,7 @@ def display_comparison(
     if video_path.startswith(("http://", "https://")):
         video_src = video_path
     else:
-        video_src = f"https://video2lora.github.io/{video_path}"
+        video_src = f"https://frames2lora.github.io/{video_path}"
 
         
     html_content = f"""
@@ -258,10 +258,10 @@ def display_comparison(
                 <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #334155;">{base_model_output}</p>
             </div>
             
-            <!-- Video2LoRA Card -->
+            <!-- Frames2LoRA Card -->
             <div style="background-color: #f0fdf4; border: 1.5px solid #16a34a; border-radius: 8px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-                <h5 style="margin: 0 0 6px 0; color: #16a34a; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em; font-weight: 700;">VIDEO2LORA</h5>
-                <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #1e293b; font-weight: 500;">{video2lora_output}</p>
+                <h5 style="margin: 0 0 6px 0; color: #16a34a; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em; font-weight: 700;">FRAMES2LORA</h5>
+                <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #1e293b; font-weight: 500;">{frames2lora_output}</p>
             </div>
             
         </div>
@@ -273,7 +273,7 @@ def display_comparison(
 
 def run_inference_and_compare(example, model, raw_model, processor, tokenizer, config, device):
     """
-    Runs both base model inference (with visual tokens) and Video2LoRA inference
+    Runs both base model inference (with visual tokens) and Frames2LoRA inference
     (zero visual tokens) for a single example, and displays their side-by-side comparison.
     """
     import gc
@@ -319,7 +319,7 @@ def run_inference_and_compare(example, model, raw_model, processor, tokenizer, c
             skip_special_tokens=True
         ).strip()
 
-        # 2. Video2LoRA Inference (zero visual tokens)
+        # 2. Frames2LoRA Inference (zero visual tokens)
         generated_loras = run_internalization(example, model, raw_model, processor, config, device)
 
         # Inject dynamic weights
@@ -360,7 +360,7 @@ def run_inference_and_compare(example, model, raw_model, processor, tokenizer, c
             eos_token_id=tokenizer.eos_token_id
         )
 
-        video2lora_pred = tokenizer.decode(
+        frames2lora_pred = tokenizer.decode(
             generated_ids[0][input_ids.shape[1]:],
             skip_special_tokens=True
         ).strip()
@@ -376,7 +376,7 @@ def run_inference_and_compare(example, model, raw_model, processor, tokenizer, c
         question_prompt=example["prompt"],
         ground_truth=example["target_text"],
         base_model_output=base_pred,
-        video2lora_output=video2lora_pred,
+        frames2lora_output=frames2lora_pred,
         dataset_name=example["dataset"]
     )
 

@@ -56,7 +56,7 @@ from ctx_to_lora.model_loading import get_lora_config
 from ctx_to_lora.modeling.hypernet import ModulatedPretrainedModel, get_hypernet_config
 from ctx_to_lora.modeling.lora_layer import apply_lora_to_layers
 from ctx_to_lora.modeling.lora_merger import combine_lora
-from scripts.video2lora.train_smolvlm_online import (
+from scripts.frames2lora.train_smolvlm_online import (
     extract_l2l_fused_text_features,
     prepare_smolvlm_inputs,
     prepare_smolvlm_teacher_batch,
@@ -64,7 +64,7 @@ from scripts.video2lora.train_smolvlm_online import (
 
 
 def debug_rank_log(accelerator: Accelerator | None, message: str) -> None:
-    if os.environ.get("VIDEO2LORA_DEBUG_STARTUP", "").lower() not in {"1", "true", "yes"}:
+    if os.environ.get("FRAMES2LORA_DEBUG_STARTUP", "").lower() not in {"1", "true", "yes"}:
         return
     rank = "na"
     if accelerator is not None:
@@ -75,7 +75,7 @@ def debug_rank_log(accelerator: Accelerator | None, message: str) -> None:
     line = f"[debug rank={rank} pid={os.getpid()}] {message}"
     print(line, flush=True)
     try:
-        with open(f"/tmp/video2lora_startup_rank_{rank}_pid_{os.getpid()}.log", "a") as f:
+        with open(f"/tmp/frames2lora_startup_rank_{rank}_pid_{os.getpid()}.log", "a") as f:
             f.write(line + "\n")
     except OSError:
         pass
@@ -212,7 +212,7 @@ def parse_args() -> TrainArgs:
         type=int,
         default=16,
     )
-    parser.add_argument("--wandb-project", default="video2lora-stage1")
+    parser.add_argument("--wandb-project", default="frames2lora-stage1")
     parser.add_argument(
         "--wandb-mode",
         default="auto",
@@ -1117,7 +1117,7 @@ def load_resume_training_state(
 
 def main():
     try:
-        with open(f"/tmp/video2lora_main_enter_pid_{os.getpid()}.log", "a") as f:
+        with open(f"/tmp/frames2lora_main_enter_pid_{os.getpid()}.log", "a") as f:
             f.write("entered main\n")
     except OSError:
         pass

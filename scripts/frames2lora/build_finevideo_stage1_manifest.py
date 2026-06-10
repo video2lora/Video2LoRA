@@ -14,7 +14,7 @@ from ctx_to_lora.data.finevideo import (
 
 
 def parse_args():
-    data_root = Path(os.environ.get("VIDEO2LORA_DATA_ROOT", "data/video2lora"))
+    data_root = Path(os.environ.get("FRAMES2LORA_DATA_ROOT", "data/frames2lora"))
     finevideo_root = data_root / "raw" / "finevideo"
     processed_root = data_root / "processed" / "finevideo"
     parser = argparse.ArgumentParser(

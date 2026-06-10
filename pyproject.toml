@@ -1,7 +1,7 @@
 [project]
-name = "video2lora"
+name = "frames2lora"
 version = "0.1.0"
-authors = [{ name = "Video2LoRA authors" }]
+authors = [{ name = "Frames2LoRA authors" }]
 description = "Video-conditioned LoRA generation for vision-language models."
 readme = "README.md"
 requires-python = ">=3.10"
